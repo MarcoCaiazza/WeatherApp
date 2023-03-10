@@ -1,0 +1,34 @@
+.containerForm{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+input{
+    height: 35px;
+    width: 250px;
+    border-radius: 5px; 
+    margin-right: 10px;
+}
+
+button{
+    height: 40px;
+    width: 40px;
+    vertical-align: middle;
+    background-image: url('./Images/icons8-ricerca-48.png');
+    background-repeat: no-repeat;
+    background-size: 30px 30px;
+    background-position: center;
+    border-radius: 3px;
+}
+.containerWeather{
+    /* background-color: aqua; */
+    display: flex;
+    justify-content: center;
+    height:300px;
+}
+.weahter{
+    background-color: rgb(189, 172, 172);
+    width: 500px;
+    height: 500px;
+    margin-top: 80px;
+}
