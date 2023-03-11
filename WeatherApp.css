@@ -1,3 +1,6 @@
+*{
+    font-family:Arial, Helvetica, sans-serif
+}
 .containerForm{
     display: flex;
     justify-content: center;
@@ -8,27 +11,62 @@ input{
     width: 250px;
     border-radius: 5px; 
     margin-right: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 3px 0 3px 10px
 }
-
 button{
-    height: 40px;
-    width: 40px;
-    vertical-align: middle;
+    height: 44px;
+    width: 44px;
+    vertical-align:bottom;
     background-image: url('./Images/icons8-ricerca-48.png');
     background-repeat: no-repeat;
     background-size: 30px 30px;
     background-position: center;
     border-radius: 3px;
 }
-.containerWeather{
-    /* background-color: aqua; */
+.container {
     display: flex;
-    justify-content: center;
-    height:300px;
-}
-.weahter{
-    background-color: rgb(189, 172, 172);
-    width: 500px;
+    margin-top: 100px;
+    background-color: red;
     height: 500px;
-    margin-top: 80px;
+    flex-direction: column;
+}
+#containerLoc{
+
+    display: flex;
+    /* background-color: aqua; */
+    justify-content: center;
+}
+#loc{
+    /* background-color: blue; */
+    margin-top: 10px;
+    font-size: 70px;
+    font-weight: bold;
+}
+.containerDegrees{
+    background-color: blueviolet;
+    display: flex;
+    margin-top: 50px;
+    justify-content:center;
+    align-items: center;
+    gap: 100px;
+}
+#degrees{
+    /* background-color: chartreuse; */
+    font-size: 70px;
+}
+#iconApp{
+    /* background-color: rgb(47, 225, 184); */
+    width: 100px;
+    height: 100px;
+    background-image: url('./Images/icons8-rain-96.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.dataAndTime {
+    font-weight: bold;
+    font-size: 45px;
+    align-self: center;
+    order: -1;
 }
