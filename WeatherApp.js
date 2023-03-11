@@ -5,7 +5,7 @@ let degrees = document.getElementById("degrees");
 let container = document.querySelector(".container");
 
 let url =
-  "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=";
+  "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Rome,It";
 
 const createDate = () => {
   let datecurrent = new Date();
@@ -23,14 +23,15 @@ const createDate = () => {
   container.appendChild(dataAndTime);
 };
 createDate();
+
 const weatherApp = () => {
   const searchLocation = (e) => {
     e.preventDefault();
     let inputValue = inputSearch.value;
     url = url.concat(inputValue).trim();
     console.log(url);
-    getDataFetch();
   };
+  getDataFetch();
 
   // funzione asincrona che unisce la ricerca all'Url
   async function getDataFetch() {
@@ -41,12 +42,28 @@ const weatherApp = () => {
     loc.innerHTML = weatherData.name;
     let kelvin = weatherData.main.temp;
     let humidity = weatherData.main.humidity;
+    let wind = weatherData.wind.speed;
+    console.log(wind);
     console.log(humidity);
-    kelvinTocelsius(kelvin, humidity);
+    kelvinTocelsius(kelvin);
+    createElementOfWeather(wind, humidity);
     // kelvinTofahrenheit(kelvin);
   }
+  const createElementOfWeather = (wind, humidity) => {
+    let element = document.createElement("element");
+    element.classList = "allElementWeather";
+    container.appendChild(element);
+    let windData = document.createElement("windData");
+    windData.classList = "windData";
+    windData.innerHTML = `${wind} km/h`;
+    element.appendChild(windData);
+    let humidityData = document.createElement("humidity");
+    humidityData.classList = "humidityData";
+    humidityData.innerHTML = `Humidity ${humidity} %`;
+    element.appendChild(humidityData);
+  };
 
-  const kelvinTocelsius = (kelvin, humidity) => {
+  const kelvinTocelsius = (kelvin) => {
     let celsius = kelvin - 273.15;
     celsius = Math.ceil(celsius);
     degrees.innerHTML = `${celsius}°C`;

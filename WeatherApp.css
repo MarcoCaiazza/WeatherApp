@@ -28,7 +28,7 @@ button{
 .container {
     display: flex;
     margin-top: 100px;
-    background-color: red;
+    /* background-color: red; */
     height: 500px;
     flex-direction: column;
 }
@@ -45,7 +45,7 @@ button{
     font-weight: bold;
 }
 .containerDegrees{
-    background-color: blueviolet;
+    /* background-color: blueviolet; */
     display: flex;
     margin-top: 50px;
     justify-content:center;
@@ -69,4 +69,12 @@ button{
     font-size: 45px;
     align-self: center;
     order: -1;
+}
+.allElementWeather{
+    margin-top: 40px;
+    font-size: 25px;
+    /* background-color: chartreuse; */
+    display: flex;
+    justify-content: center;
+    gap: 70px;
 }
