@@ -57,7 +57,7 @@ button{
     font-weight: bold;
 }
 .containerDegrees{
-    background-color: blueviolet;
+    /* background-color: blueviolet; */
     display: flex;
     margin-top: 50px;
     justify-content:center;

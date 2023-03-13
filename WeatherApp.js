@@ -53,7 +53,9 @@ const weatherApp = () => {
     let humidity = weatherData.main.humidity;
     let wind = weatherData.wind.speed;
     let currentWeather = weatherData.weather[0].main;
-    changeIconWeahter(currentWeather);
+    let descriptionWeather = weatherData.weather[0].description;
+    console.log(descriptionWeather);
+    changeIconWeahter(currentWeather, descriptionWeather);
     kelvinTocelsius(kelvin);
     updatesWindAndHumidityValues(wind, humidity);
 
@@ -85,17 +87,34 @@ const weatherApp = () => {
     console.log(fahrenheit);
   };
 
-  const changeIconWeahter = (currentWeather) => {
+  const changeIconWeahter = (currentWeather, descriptionWeather) => {
     if (currentWeather === "Clouds") {
-      iconApp.style.backgroundImage = "url('./Images/icons8-clouds-96.png')";
-      body.style.background =
-        "url('./Images/1410436706000-Mostly-cloudy.webp')";
-    } else if (currentWeather === "Clear") {
+      if (descriptionWeather === "few clouds") {
+        iconApp.style.backgroundImage =
+          "url('./Images/icons8-partly-cloudy-day-96.png')";
+        body.style.backgroundImage = "url('./Images/6408e023093bd.hires.webp')";
+      } else if (descriptionWeather === "scattered clouds") {
+        iconApp.style.backgroundImage =
+          "url('./Images/icons8-partly-cloudy-day-96.png')";
+        body.style.backgroundImage = "url('./Images/clouds.jpeg')";
+      } else {
+        body.style.background =
+          "url('./Images/1410436706000-Mostly-cloudy.webp')";
+        iconApp.style.backgroundImage = "url('./Images/icons8-clouds-96.png')";
+      }
+    }
+    if (currentWeather === "Clear") {
       iconApp.style.backgroundImage = "url('./Images/icons8-sun-96.png')";
       body.style.background = "url('./Images/background-sun.jpg')";
     } else if (currentWeather === "Rain") {
-      iconApp.style.backgroundImage = "url('./Images/icons8-rain-96.png')";
-      body.style.background = "url('./Images/background-rain.jpg')";
+      if (descriptionWeather === "shower rain") {
+        iconApp.style.backgroundImage = "url('./Images/icons8-rain-96.png')";
+        body.style.background =
+          "url('./Images/rain-drops-on-window-1827098_1920.jpg.webp')";
+      } else {
+        iconApp.style.backgroundImage = "url('./Images/icons8-rain-96.png')";
+        body.style.background = "url('./Images/GettyImages-503284599.webp')";
+      }
     } else if (currentWeather === "Snow") {
       iconApp.style.backgroundImage = "url('./Images/icons8-snow-96.png')";
       body.style.background = "url('./Images/background-snow.jpg')";
