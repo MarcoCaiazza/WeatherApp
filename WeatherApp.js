@@ -5,9 +5,11 @@ const degrees = document.getElementById("degrees");
 const container = document.querySelector(".container");
 const iconApp = document.getElementById("iconApp");
 const body = document.querySelector("body");
+const windData = document.querySelector("#windData");
+const humidityData = document.querySelector("#humidityData");
 
 let url =
-  "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=tokyo";
+  "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Roma,IT";
 
 const createDate = () => {
   let datecurrent = new Date();
@@ -29,9 +31,12 @@ createDate();
 const weatherApp = () => {
   const searchLocation = (e) => {
     e.preventDefault();
+    url =
+      "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=";
     let inputValue = inputSearch.value;
     url = url.concat(inputValue).trim();
     console.log(url);
+    getDataFetch();
   };
   getDataFetch();
 
@@ -46,26 +51,14 @@ const weatherApp = () => {
     let humidity = weatherData.main.humidity;
     let wind = weatherData.wind.speed;
     let currentWeather = weatherData.weather[0].main;
-    console.log(currentWeather);
-    console.log(wind);
-    console.log(humidity);
     changeIconWeahter(currentWeather);
     kelvinTocelsius(kelvin);
-    createElementOfWeather(wind, humidity);
+    updatesWindAndHumidityValues(wind, humidity);
     // kelvinTofahrenheit(kelvin);
   }
-  const createElementOfWeather = (wind, humidity) => {
-    let element = document.createElement("div");
-    element.classList = "allElementWeather";
-    container.appendChild(element);
-    let windData = document.createElement("div");
-    windData.classList = "windData";
+  const updatesWindAndHumidityValues = (wind, humidity) => {
     windData.innerHTML = `Wind Speed : ${wind} km/h`;
-    element.appendChild(windData);
-    let humidityData = document.createElement("div");
-    humidityData.classList = "humidityData";
     humidityData.innerHTML = `Humidity : ${humidity} %`;
-    element.appendChild(humidityData);
   };
 
   const kelvinTocelsius = (kelvin) => {
@@ -83,16 +76,24 @@ const weatherApp = () => {
   const changeIconWeahter = (currentWeather) => {
     if (currentWeather === "Clouds") {
       iconApp.style.backgroundImage = "url('./Images/icons8-clouds-96.png')";
-      body.style.background = "url('./Images/background-cloud-804.jpg')";
+      body.style.background =
+        "url('./Images/1410436706000-Mostly-cloudy.webp')";
     } else if (currentWeather === "Clear") {
       iconApp.style.backgroundImage = "url('./Images/icons8-sun-96.png')";
-      // body.style.background = "url('./Images/background-sun-801.jpg')";
+      body.style.background = "url('./Images/background-sun.jpg')";
     } else if (currentWeather === "Rain") {
       iconApp.style.backgroundImage = "url('./Images/icons8-rain-96.png')";
       body.style.background = "url('./Images/background-rain.jpg')";
-      body.style.color = "white";
+    } else if (currentWeather === "Snow") {
+      iconApp.style.backgroundImage = "url('./Images/icons8-snow-96.png')";
+      body.style.background = "url('./Images/background-snow.jpg')";
     }
   };
+
+  const changeFahrenheit = () => {
+    console.log("ciao");
+  };
+  degrees.addEventListener("click", changeFahrenheit);
 
   btnSearch.addEventListener("click", (e) => searchLocation(e));
 };

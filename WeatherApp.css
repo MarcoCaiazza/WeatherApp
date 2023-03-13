@@ -6,7 +6,7 @@ body {
     width: 100vw;
     overflow: hidden;
     color: white;
-    text-shadow: 5px 6px 8px rgba(0, 0, 0, 0.5)
+    text-shadow: 1px -1px 20px   black;
 }
 *{
     font-family:Arial, Helvetica, sans-serif;
@@ -57,7 +57,7 @@ button{
     font-weight: bold;
 }
 .containerDegrees{
-    /* background-color: blueviolet; */
+    background-color: blueviolet;
     display: flex;
     margin-top: 50px;
     justify-content:center;
@@ -70,8 +70,8 @@ button{
 }
 #iconApp{
     /* background-color: rgb(47, 225, 184); */
-    width: 100px;
-    height: 100px;
+    width: 140px;
+    height: 140px;
     background-image: url('./Images/icons8-sun-96.png');
     background-repeat: no-repeat;
     background-position: center;
@@ -82,12 +82,13 @@ button{
     align-self: center;
     order: -1;
 }
-.allElementWeather{
-    margin-top: 40px;
+.containerWindHumidity{
+    margin-top: 70px;
     font-size: 20px;
-    /* background-color: chartreuse; */
-    display: flex;
-    justify-content: center;
-    gap: 70px;
-}
-
+    /* background-color: chartreuse;  */
+    display: flex; 
+    justify-content: center; 
+    gap: 70px; 
+    font-size: 25px;
+    font-weight: bold;
+} 
