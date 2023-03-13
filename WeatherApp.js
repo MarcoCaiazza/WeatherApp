@@ -40,6 +40,8 @@ const weatherApp = () => {
   };
   getDataFetch();
 
+  let kelvin;
+  let fahrenheitValue;
   // funzione asincrona che unisce la ricerca all'Url
   async function getDataFetch() {
     // metodo fetch per ottenere i dati API
@@ -47,15 +49,23 @@ const weatherApp = () => {
     const weatherData = await response.json();
     console.log(weatherData);
     loc.innerHTML = weatherData.name;
-    let kelvin = weatherData.main.temp;
+    kelvin = weatherData.main.temp;
     let humidity = weatherData.main.humidity;
     let wind = weatherData.wind.speed;
     let currentWeather = weatherData.weather[0].main;
     changeIconWeahter(currentWeather);
     kelvinTocelsius(kelvin);
     updatesWindAndHumidityValues(wind, humidity);
+
     // kelvinTofahrenheit(kelvin);
   }
+  const changeDegrees = () => {
+    if (fahrenheitValue === false) {
+      celsiusTofahrenheit(kelvin);
+    } else kelvinTocelsius(kelvin);
+  };
+  degrees.addEventListener("click", changeDegrees);
+
   const updatesWindAndHumidityValues = (wind, humidity) => {
     windData.innerHTML = `Wind Speed : ${wind} km/h`;
     humidityData.innerHTML = `Humidity : ${humidity} %`;
@@ -65,11 +75,13 @@ const weatherApp = () => {
     let celsius = kelvin - 273.15;
     celsius = Math.ceil(celsius);
     degrees.innerHTML = `${celsius}°C`;
+    fahrenheitValue = false;
   };
-  const kelvinTofahrenheit = (kelvin) => {
+  const celsiusTofahrenheit = (kelvin) => {
     let fahrenheit = ((kelvin - 273.15) * 9) / 5 + 32;
     fahrenheit = Math.floor(fahrenheit);
-    degrees.innerHTML = fahrenheit;
+    degrees.innerHTML = `${fahrenheit}°F`;
+    fahrenheitValue = true;
     console.log(fahrenheit);
   };
 
@@ -89,11 +101,6 @@ const weatherApp = () => {
       body.style.background = "url('./Images/background-snow.jpg')";
     }
   };
-
-  const changeFahrenheit = () => {
-    console.log("ciao");
-  };
-  degrees.addEventListener("click", changeFahrenheit);
 
   btnSearch.addEventListener("click", (e) => searchLocation(e));
 };
