@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'Montserrat';
+    src: url('./fonts/Montserrat-VariableFont_wght.ttf');
+    font-style: normal;
+    font-weight: normal; 
+}
+*{
+    font-family:'Montserrat'
+}
 body {
     background:url('./Images/background-sun.jpg');
     background-repeat: no-repeat;
@@ -7,9 +16,7 @@ body {
     overflow: hidden;
     color: white;
     text-shadow: 1px -1px 20px   black;
-}
-*{
-    font-family:Arial, Helvetica, sans-serif;
+    transition: background 0.5s ease-in-out;
 }
 .containerForm{
     display: flex;
@@ -92,3 +99,28 @@ button{
     font-size: 25px;
     font-weight: bold;
 } 
+.box_day_hours {
+    /* background-color: blue; */
+    height: 200px;
+    display: flex;
+    justify-content: center
+}
+.box_day {
+    /* background-color: bisque; */
+    width: 1000px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.hour_degrees{
+    /* background-color: blueviolet; */
+    width: 110px;
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    border:2px solid red;
+    border-radius:4px;
+}
