@@ -2,7 +2,7 @@
 
 Weather app created with HTML, CSS and JS.
 
-What I learned
+# What I learned :
 AJAX
 Promises
 Async/Await
