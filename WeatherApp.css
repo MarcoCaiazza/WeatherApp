@@ -74,6 +74,7 @@ button{
 #degrees{
     /* background-color: chartreuse; */
     font-size: 70px;
+    font-weight: bold;
 }
 #iconApp{
     /* background-color: rgb(47, 225, 184); */
@@ -82,6 +83,18 @@ button{
     background-image: url('./Images/icons8-sun-96.png');
     background-repeat: no-repeat;
     background-position: center;
+}
+.icon {
+    /* background-color: red; */
+    width: 38px;
+    height: 38px;
+    background-image: url('./Images/icons8-sun-96.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50px 50px;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
 }
 .dataAndTime {
     font-weight: bold;
@@ -120,7 +133,10 @@ button{
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
+    gap: 20px;
     border:2px solid red;
     border-radius:4px;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
 }

@@ -8,7 +8,7 @@ const iconApp = document.getElementById("iconApp");
 const body = document.querySelector("body");
 const windData = document.querySelector("#windData");
 const humidityData = document.querySelector("#humidityData");
-const smallIcon = document.querySelector(".icon");
+const smallIcon = document.getElementsByClassName("icon");
 const hour = document.querySelectorAll(".hour");
 
 let kelvin;
@@ -74,37 +74,53 @@ const weatherApp = () => {
     kelvinTocelsius(kelvin);
     updatesWindAndHumidityValues(wind, humidity);
   }
-  let wHour;
+  let wHourArray = [];
   const getHourlyWeather = (weatherHour) => {
+    let wHour;
     for (let i = 0; i < 8; i++) {
       let weatherObject = weatherHour[i];
       for (let property in weatherObject) {
         if (property === "weather") {
           for (let i = 0; i < weatherObject[property].length; i++) {
             wHour = weatherObject[property][i].main;
+            // console.log(wHour);
+            wHourArray.push(wHour);
           }
         }
       }
     }
   };
 
-  let wHourThree;
+  let wHourThreeArray = [];
   const getTimeEveryThreeHours = (weatherHour) => {
     for (let i = 0; i < 8; i++) {
       let weatherObject = weatherHour[i];
-      wHourThree = weatherObject.dt_txt;
-      wHourThree = wHourThree.slice(11).slice(0, 5);
+      for (let property in weatherObject) {
+        if (property === "dt_txt") {
+          let wHourThree = weatherObject[property];
+          wHourThree = wHourThree.slice(11).slice(0, 5);
+          wHourThreeArray.push(wHourThree);
+        }
+      }
     }
   };
 
-  const changeSmallIconWeather = (wHourThree) => {
-    console.log(wHourThree);
-    console.log(hour[5]);
-    if (wHourThree === hour[5].textContent) {
-      // creare condizione if per il meteo(weathour === "clear")
+  const changeSmallIconWeather = () => {
+    let itemHour;
+    for (let i = 0; i < wHourThreeArray.length; i++) {
+      itemHour = wHourThreeArray[i];
+      if (itemHour === hour[4].textContent) {
+        for (let i = 0; i < wHourArray.length; i++) {
+          if (wHourArray[i] === "Clouds") {
+            for (let j = 0; j < smallIcon.length; j++) {
+              smallIcon[4].style.backgroundImage =
+                "url('./Images/icons8-sunCloudy.png')";
+            }
+          }
+        }
+      }
     }
   };
-
   async function getHourFetch() {
     const responseHour = await fetch(urlHour, { mode: "cors" });
     const weatherHourData = await responseHour.json();
@@ -112,7 +128,7 @@ const weatherApp = () => {
     let weatherHour = weatherHourData.list;
     getHourlyWeather(weatherHour);
     getTimeEveryThreeHours(weatherHour);
-    changeSmallIconWeather(wHourThree);
+    changeSmallIconWeather();
   }
   getHourFetch();
 
