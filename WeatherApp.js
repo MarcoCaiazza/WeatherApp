@@ -14,13 +14,12 @@ const hour = document.querySelectorAll(".hour");
 let kelvin;
 let fahrenheitValue;
 let url =
-  "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Roma,IT";
+  "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Londra";
 
 let urlHour =
-  "https://api.openweathermap.org/data/2.5/forecast?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Roma,IT";
-// console.log(urlHour);
+  "https://api.openweathermap.org/data/2.5/forecast?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Londra";
+let datecurrent = new Date();
 const createDate = () => {
-  let datecurrent = new Date();
   let date =
     `${datecurrent.getDate()}` +
     "/" +
@@ -37,7 +36,7 @@ const createDate = () => {
   dataAndTime.innerHTML = date;
   container.appendChild(dataAndTime);
 };
-createDate();
+// createDate();
 
 const weatherApp = () => {
   const searchLocation = (e) => {
@@ -56,25 +55,28 @@ const weatherApp = () => {
       getDataFetch();
     }
   };
-  getDataFetch();
+  // getDataFetch();
 
   // funzione asincrona che unisce la ricerca all'Url
-  async function getDataFetch() {
-    // metodo fetch per ottenere i dati API
-    const response = await fetch(url, { mode: "cors" });
-    const weatherData = await response.json();
-    // console.log(weatherData);
-    loc.innerHTML = weatherData.name;
-    kelvin = weatherData.main.temp;
-    let humidity = weatherData.main.humidity;
-    let wind = weatherData.wind.speed;
-    let currentWeather = weatherData.weather[0].main;
-    let descriptionWeather = weatherData.weather[0].description;
-    changeIconWeahter(currentWeather, descriptionWeather);
-    kelvinTocelsius(kelvin);
-    updatesWindAndHumidityValues(wind, humidity);
-  }
+  // async function getDataFetch() {
+  //   // metodo fetch per ottenere i dati API
+  //   const response = await fetch(url, { mode: "cors" });
+  //   const weatherData = await response.json();
+  //   console.log(weatherData);
+  //   loc.innerHTML = weatherData.name;
+  //   kelvin = weatherData.main.temp;
+  //   let humidity = weatherData.main.humidity;
+  //   let wind = weatherData.wind.speed;
+  //   let currentWeather = weatherData.weather[0].main;
+  //   let descriptionWeather = weatherData.weather[0].description;
+  //   changeIconWeahter(currentWeather, descriptionWeather);
+  //   kelvinTocelsius(kelvin);
+  //   updatesWindAndHumidityValues(wind, humidity);
+  // }
+  getHourFetch();
+
   let wHourArray = [];
+
   const getHourlyWeather = (weatherHour) => {
     let wHour;
     for (let i = 0; i < 8; i++) {
@@ -109,14 +111,56 @@ const weatherApp = () => {
     let itemHour;
     for (let i = 0; i < wHourThreeArray.length; i++) {
       itemHour = wHourThreeArray[i];
-      if (itemHour === hour[4].textContent) {
+      if (itemHour === hour[0].textContent) {
+        console.log(itemHour);
+        // console.log(wHourArray);
         for (let i = 0; i < wHourArray.length; i++) {
-          if (wHourArray[i] === "Clouds") {
-            for (let j = 0; j < smallIcon.length; j++) {
-              smallIcon[4].style.backgroundImage =
-                "url('./Images/icons8-sunCloudy.png')";
+          if (wHourArray[3] === "Clouds") {
+            //sistemare orario per icona
+            if (itemHour <= 21 && itemHour >= 6) {
+              for (let j = 0; j < smallIcon.length; j++) {
+                smallIcon[0].style.backgroundImage =
+                  "url('./Images/icons8-sunCloudy.png')";
+              }
+            } else {
+              for (let j = 0; j < smallIcon.length; j++) {
+                smallIcon[0].style.backgroundImage =
+                  "url('./Images/icons8-night-96.png')";
+              }
             }
           }
+          if (wHourArray[3] === "Clear") {
+            if (itemHour <= 21 && itemHour >= 6) {
+              for (let j = 0; j < smallIcon.length; j++) {
+                smallIcon[0].style.backgroundImage =
+                  "url('./Images/icons8-sun-96.png')";
+              }
+            } else {
+              for (let j = 0; j < smallIcon.length; j++) {
+                smallIcon[0].style.backgroundImage =
+                  "url('./Images/icons8-moon-and-stars-96.png')";
+              }
+            }
+          }
+          // if (wHourArray[3] === "Rain") {
+          //   if (itemHour >= 21) {
+          //     for (let j = 0; j < smallIcon.length; j++) {
+          //       smallIcon[0].style.backgroundImage =
+          //         "url('./Images/icons8-rain-96.png')";
+          //     }
+          //   } else {
+          //     for (let j = 0; j < smallIcon.length; j++) {
+          //       smallIcon[0].style.backgroundImage =
+          //         "url('./Images/icons8-rain-night-96.png')";
+          //     }
+          //   }
+          // }
+          // if (wHourArray[3] === "Snow") {
+          //   for (let j = 0; j < smallIcon.length; j++) {
+          //     smallIcon[0].style.backgroundImage =
+          //       "url('./Images/icons8-snow-96.png')";
+          //   }
+          // }
         }
       }
     }
@@ -124,13 +168,12 @@ const weatherApp = () => {
   async function getHourFetch() {
     const responseHour = await fetch(urlHour, { mode: "cors" });
     const weatherHourData = await responseHour.json();
-    // console.log(weatherHourData);
+    console.log(weatherHourData);
     let weatherHour = weatherHourData.list;
     getHourlyWeather(weatherHour);
     getTimeEveryThreeHours(weatherHour);
     changeSmallIconWeather();
   }
-  getHourFetch();
 
   const changeDegrees = () => {
     if (fahrenheitValue === false) {
