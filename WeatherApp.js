@@ -14,10 +14,10 @@ const hour = document.querySelectorAll(".hour");
 let kelvin;
 let fahrenheitValue;
 let url =
-  "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Londra";
+  "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Tokyo";
 
 let urlHour =
-  "https://api.openweathermap.org/data/2.5/forecast?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Londra";
+  "https://api.openweathermap.org/data/2.5/forecast?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Tokyo";
 let datecurrent = new Date();
 const createDate = () => {
   let date =
@@ -77,15 +77,28 @@ const weatherApp = () => {
 
   let wHourArray = [];
 
+  let listArray = [];
+
   const getHourlyWeather = (weatherHour) => {
     let wHour;
+
     for (let i = 0; i < 8; i++) {
-      let weatherObject = weatherHour[i];
+      listArray.push(weatherHour[i]);
+      listArray.sort((a, b) => {
+        let dateA = new Date(a.dt * 1000);
+        let dateB = new Date(b.dt * 1000);
+        let hourA = dateA.getHours();
+        let hourB = dateB.getHours();
+        return hourA - hourB;
+      });
+    }
+    for (let i = 0; i < listArray.length; i++) {
+      let weatherObject = listArray[i];
+      console.log(weatherObject);
       for (let property in weatherObject) {
         if (property === "weather") {
           for (let i = 0; i < weatherObject[property].length; i++) {
             wHour = weatherObject[property][i].main;
-            // console.log(wHour);
             wHourArray.push(wHour);
           }
         }
@@ -106,64 +119,589 @@ const weatherApp = () => {
       }
     }
   };
-
   const changeSmallIconWeather = () => {
     let itemHour;
+    let itemHourArray = [];
+
     for (let i = 0; i < wHourThreeArray.length; i++) {
-      itemHour = wHourThreeArray[i];
+      itemHourArray.push(wHourThreeArray[i]);
+    }
+    //ORDINA DA 00:00 A 21:00
+    itemHourArray.sort((a, b) => {
+      let [aHours, aMinutes] = a.split(":");
+      let [bHours, bMinutes] = b.split(":");
+      if (aHours === 0) {
+        aHours = "24";
+      } // considera mezzanotte come 24:00
+      if (bHours === 0) {
+        bHours = "24";
+      }
+      let aTotalMinutes = aHours * 60 + aMinutes;
+      let bTotalMinutes = bHours * 60 + bMinutes;
+      return aTotalMinutes - bTotalMinutes;
+    });
+    //posizione ora/meteo
+    let positionWeatherHour = wHourArray.map((value, index) => {
+      return { time: itemHourArray[index], wt: value };
+    });
+    console.log(positionWeatherHour);
+    // confronto orario con ora html
+    for (let i = 0; i < itemHourArray.length; i++) {
+      itemHour = itemHourArray[i];
+      //21:00
+      if (itemHour === hour[5].textContent) {
+        if (positionWeatherHour[7].wt === "Clouds") {
+          smallIcon[5].style.backgroundImage =
+            "url('./Images/icons8-night-96.png')";
+        }
+        if (positionWeatherHour[7].wt === "Clear") {
+          smallIcon[5].style.backgroundImage =
+            "url('./Images/icons8-moon-and-stars-96.png')";
+        }
+        if (positionWeatherHour[7].wt === "Rain") {
+          smallIcon[5].style.backgroundImage =
+            "url('./Images/icons8-rainy-night-96.png')";
+        }
+        if (positionWeatherHour[7].wt === "Snow") {
+          smallIcon[5].style.backgroundImage =
+            "url('./Images/icons8-snow-96.png')";
+        }
+      }
+      // 18:00
+      if (itemHour === hour[4].textContent) {
+        if (positionWeatherHour[6].wt === "Clouds") {
+          smallIcon[4].style.backgroundImage =
+            "url('./Images/icons8-sunCloudy.png')";
+        }
+        if (positionWeatherHour[6].wt === "Clear") {
+          smallIcon[4].style.backgroundImage =
+            "url('./Images/icons8-sun-96.png')";
+        }
+        if (positionWeatherHour[6].wt === "Rain") {
+          smallIcon[4].style.backgroundImage =
+            "url('./Images/icons8-rain-96.png')";
+        }
+        if (positionWeatherHour[6].wt === "Snow") {
+          smallIcon[4].style.backgroundImage =
+            "url('./Images/icons8-snow-96.png')";
+        }
+      }
+      // 15:00
+      if (itemHour === hour[3].textContent) {
+        if (positionWeatherHour[5].wt === "Clouds") {
+          smallIcon[3].style.backgroundImage =
+            "url('./Images/icons8-sunCloudy.png')";
+        }
+        if (positionWeatherHour[5].wt === "Clear") {
+          smallIcon[3].style.backgroundImage =
+            "url('./Images/icons8-sun-96.png')";
+        }
+        if (positionWeatherHour[5].wt === "Rain") {
+          smallIcon[3].style.backgroundImage =
+            "url('./Images/icons8-rain-96.png')";
+        }
+        if (positionWeatherHour[5].wt === "Snow") {
+          smallIcon[3].style.backgroundImage =
+            "url('./Images/icons8-snow-96.png')";
+        }
+      }
+      // 12:00
+      if (itemHour === hour[2].textContent) {
+        if (positionWeatherHour[4].wt === "Clouds") {
+          smallIcon[2].style.backgroundImage =
+            "url('./Images/icons8-sunCloudy.png')";
+        }
+        if (positionWeatherHour[4].wt === "Clear") {
+          smallIcon[2].style.backgroundImage =
+            "url('./Images/icons8-sun-96.png')";
+        }
+        if (positionWeatherHour[4].wt === "Rain") {
+          smallIcon[2].style.backgroundImage =
+            "url('./Images/icons8-rain-96.png')";
+        }
+        if (positionWeatherHour[4].wt === "Snow") {
+          smallIcon[2].style.backgroundImage =
+            "url('./Images/icons8-snow-96.png')";
+        }
+      }
+      // 09:00
+      if (itemHour === hour[1].textContent) {
+        if (positionWeatherHour[3].wt === "Clouds") {
+          smallIcon[1].style.backgroundImage =
+            "url('./Images/icons8-sunCloudy.png')";
+        }
+        if (positionWeatherHour[3].wt === "Clear") {
+          smallIcon[1].style.backgroundImage =
+            "url('./Images/icons8-sun-96.png')";
+        }
+        if (positionWeatherHour[3].wt === "Rain") {
+          smallIcon[1].style.backgroundImage =
+            "url('./Images/icons8-rain-96.png')";
+        }
+        if (positionWeatherHour[3].wt === "Snow") {
+          smallIcon[1].style.backgroundImage =
+            "url('./Images/icons8-snow-96.png')";
+        }
+      }
+      // 06:00
       if (itemHour === hour[0].textContent) {
-        console.log(itemHour);
-        // console.log(wHourArray);
-        for (let i = 0; i < wHourArray.length; i++) {
-          if (wHourArray[3] === "Clouds") {
-            //sistemare orario per icona
-            if (itemHour <= 21 && itemHour >= 6) {
-              for (let j = 0; j < smallIcon.length; j++) {
-                smallIcon[0].style.backgroundImage =
-                  "url('./Images/icons8-sunCloudy.png')";
-              }
-            } else {
-              for (let j = 0; j < smallIcon.length; j++) {
-                smallIcon[0].style.backgroundImage =
-                  "url('./Images/icons8-night-96.png')";
-              }
-            }
-          }
-          if (wHourArray[3] === "Clear") {
-            if (itemHour <= 21 && itemHour >= 6) {
-              for (let j = 0; j < smallIcon.length; j++) {
-                smallIcon[0].style.backgroundImage =
-                  "url('./Images/icons8-sun-96.png')";
-              }
-            } else {
-              for (let j = 0; j < smallIcon.length; j++) {
-                smallIcon[0].style.backgroundImage =
-                  "url('./Images/icons8-moon-and-stars-96.png')";
-              }
-            }
-          }
-          // if (wHourArray[3] === "Rain") {
-          //   if (itemHour >= 21) {
-          //     for (let j = 0; j < smallIcon.length; j++) {
-          //       smallIcon[0].style.backgroundImage =
-          //         "url('./Images/icons8-rain-96.png')";
-          //     }
-          //   } else {
-          //     for (let j = 0; j < smallIcon.length; j++) {
-          //       smallIcon[0].style.backgroundImage =
-          //         "url('./Images/icons8-rain-night-96.png')";
-          //     }
-          //   }
-          // }
-          // if (wHourArray[3] === "Snow") {
-          //   for (let j = 0; j < smallIcon.length; j++) {
-          //     smallIcon[0].style.backgroundImage =
-          //       "url('./Images/icons8-snow-96.png')";
-          //   }
-          // }
+        if (positionWeatherHour[2].wt === "Clouds") {
+          smallIcon[0].style.backgroundImage =
+            "url('./Images/icons8-sunCloudy.png')";
+        }
+        if (positionWeatherHour[2].wt === "Clear") {
+          smallIcon[0].style.backgroundImage =
+            "url('./Images/icons8-sun-96.png')";
+        }
+        if (positionWeatherHour[2].wt === "Rain") {
+          smallIcon[0].style.backgroundImage =
+            "url('./Images/icons8-rain-96.png')";
+        }
+        if (positionWeatherHour[2].wt === "Snow") {
+          smallIcon[0].style.backgroundImage =
+            "url('./Images/icons8-snow-96.png')";
+        }
+      }
+      //03:00
+      if (itemHour === hour[7].textContent) {
+        if (positionWeatherHour[1].wt === "Clouds") {
+          smallIcon[7].style.backgroundImage =
+            "url('./Images/icons8-night-96.png')";
+        }
+        if (positionWeatherHour[1].wt === "Clear") {
+          smallIcon[7].style.backgroundImage =
+            "url('./Images/icons8-moon-and-stars-96.png')";
+        }
+        if (positionWeatherHour[1].wt === "Rain") {
+          smallIcon[7].style.backgroundImage =
+            "url('./Images/icons8-rainy-night-96.png')";
+        }
+        if (positionWeatherHour[1].wt === "Snow") {
+          smallIcon[7].style.backgroundImage =
+            "url('./Images/icons8-snow-96.png')";
+        }
+      }
+      //00:00
+      if (itemHour === hour[6].textContent) {
+        if (positionWeatherHour[0].wt === "Clouds") {
+          smallIcon[6].style.backgroundImage =
+            "url('./Images/icons8-night-96.png')";
+        }
+        if (positionWeatherHour[0].wt === "Clear") {
+          smallIcon[6].style.backgroundImage =
+            "url('./Images/icons8-moon-and-stars-96.png')";
+        }
+        if (positionWeatherHour[0].wt === "Rain") {
+          smallIcon[6].style.backgroundImage =
+            "url('./Images/icons8-rainy-night-96.png')";
+        }
+        if (positionWeatherHour[0].wt === "Snow") {
+          smallIcon[6].style.backgroundImage =
+            "url('./Images/icons8-snow-96.png')";
         }
       }
     }
+
+    // console.log(itemHourArray);
+    // console.log(wHourArray);
+    // if (itemHour === hour[5].textContent) {
+    //   for (let i = 0; i < wHourArray.length; i++) {}
+    // }
+
+    // if (itemHour === hour[0].textContent) {
+    //   for (let i = 0; i < wHourArray.length; i++) {
+    // if (wHourArray[0] === "Clouds") {
+    //   if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //     for (let i = 0; i < smallIcon.length; i++) {
+    //       smallIcon[0].style.backgroundImage =
+    //         "url('./Images/icons8-sunCloudy.png')";
+    //     }
+    //   } else {
+    //     for (let i = 0; i < smallIcon.length; i++) {
+    //       smallIcon[0].style.backgroundImage =
+    //         "url('./Images/icons8-night-96.png')";
+    //     }
+    //   }
+    // }
+    // if (wHourArray[2] === "Clear") {
+    //   if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //     for (let i = 0; i < smallIcon.length; i++) {
+    //       smallIcon[0].style.backgroundImage =
+    //         "url('./Images/icons8-sun-96.png')";
+    //     }
+    //   } else {
+    //     for (let i = 0; i < smallIcon.length; i++) {
+    //       smallIcon[0].style.backgroundImage =
+    //         "url('./Images/icons8-moon-and-stars-96.png')";
+    //     }
+    //   }
+    // }
+    //     if (wHourArray[2] === "Rain") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[0].style.backgroundImage =
+    //             "url('./Images/icons8-rain-96.png')";
+    //         }
+    //       } else {
+    //         for (let j = 0; j < smallIcon.length; j++) {
+    //           smallIcon[0].style.backgroundImage =
+    //             "url('./Images/icons8-rain-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[2] === "Snow") {
+    //       for (let j = 0; j < smallIcon.length; j++) {
+    //         smallIcon[0].style.backgroundImage =
+    //           "url('./Images/icons8-snow-96.png')";
+    //       }
+    //     }
+    //   }
+    // }
+    // if (itemHour === hour[1].textContent) {
+    //   for (let i = 0; i < wHourArray.length; i++) {
+    //     if (wHourArray[3] === "Clouds") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[1].style.backgroundImage =
+    //             "url('./Images/icons8-sunCloudy.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[1].style.backgroundImage =
+    //             "url('./Images/icons8-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[3] === "Clear") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[0].style.backgroundImage =
+    //             "url('./Images/icons8-sun-96.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[1].style.backgroundImage =
+    //             "url('./Images/icons8-moon-and-stars-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[3] === "Rain") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[1].style.backgroundImage =
+    //             "url('./Images/icons8-rain-96.png')";
+    //         }
+    //       } else {
+    //         for (let j = 0; j < smallIcon.length; j++) {
+    //           smallIcon[1].style.backgroundImage =
+    //             "url('./Images/icons8-rain-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[3] === "Snow") {
+    //       for (let j = 0; j < smallIcon.length; j++) {
+    //         smallIcon[1].style.backgroundImage =
+    //           "url('./Images/icons8-snow-96.png')";
+    //       }
+    //     }
+    //   }
+    // }
+    // if (itemHour === hour[2].textContent) {
+    //   for (let i = 0; i < wHourArray.length; i++) {
+    //     if (wHourArray[4] === "Clouds") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[2].style.backgroundImage =
+    //             "url('./Images/icons8-sunCloudy.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[2].style.backgroundImage =
+    //             "url('./Images/icons8-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[4] === "Clear") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[2].style.backgroundImage =
+    //             "url('./Images/icons8-sun-96.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[2].style.backgroundImage =
+    //             "url('./Images/icons8-moon-and-stars-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[4] === "Rain") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[2].style.backgroundImage =
+    //             "url('./Images/icons8-rain-96.png')";
+    //         }
+    //       } else {
+    //         for (let j = 0; j < smallIcon.length; j++) {
+    //           smallIcon[2].style.backgroundImage =
+    //             "url('./Images/icons8-rain-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[4] === "Snow") {
+    //       for (let j = 0; j < smallIcon.length; j++) {
+    //         smallIcon[2].style.backgroundImage =
+    //           "url('./Images/icons8-snow-96.png')";
+    //       }
+    //     }
+    //   }
+    // }
+    // if (itemHour === hour[3].textContent) {
+    //   for (let i = 0; i < wHourArray.length; i++) {
+    //     if (wHourArray[5] === "Clouds") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[3].style.backgroundImage =
+    //             "url('./Images/icons8-sunCloudy.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[3].style.backgroundImage =
+    //             "url('./Images/icons8-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[5] === "Clear") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[3].style.backgroundImage =
+    //             "url('./Images/icons8-sun-96.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[3].style.backgroundImage =
+    //             "url('./Images/icons8-moon-and-stars-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[5] === "Rain") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[3].style.backgroundImage =
+    //             "url('./Images/icons8-rain-96.png')";
+    //         }
+    //       } else {
+    //         for (let j = 0; j < smallIcon.length; j++) {
+    //           smallIcon[3].style.backgroundImage =
+    //             "url('./Images/icons8-rain-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[5] === "Snow") {
+    //       for (let j = 0; j < smallIcon.length; j++) {
+    //         smallIcon[3].style.backgroundImage =
+    //           "url('./Images/icons8-snow-96.png')";
+    //       }
+    //     }
+    //   }
+    // }
+    // if (itemHour === hour[4].textContent) {
+    //   for (let i = 0; i < wHourArray.length; i++) {
+    //     if (wHourArray[6] === "Clouds") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[4].style.backgroundImage =
+    //             "url('./Images/icons8-sunCloudy.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[4].style.backgroundImage =
+    //             "url('./Images/icons8-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[6] === "Clear") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[4].style.backgroundImage =
+    //             "url('./Images/icons8-sun-96.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[4].style.backgroundImage =
+    //             "url('./Images/icons8-moon-and-stars-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[6] === "Rain") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[4].style.backgroundImage =
+    //             "url('./Images/icons8-rain-96.png')";
+    //         }
+    //       } else {
+    //         for (let j = 0; j < smallIcon.length; j++) {
+    //           smallIcon[4].style.backgroundImage =
+    //             "url('./Images/icons8-rain-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[6] === "Snow") {
+    //       for (let j = 0; j < smallIcon.length; j++) {
+    //         smallIcon[4].style.backgroundImage =
+    //           "url('./Images/icons8-snow-96.png')";
+    //       }
+    //     }
+    //   }
+    // }
+    // if (itemHour === hour[5].textContent) {
+    //   for (let i = 0; i < wHourArray.length; i++) {
+    //     if (wHourArray[7] === "Clouds") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[5].style.backgroundImage =
+    //             "url('./Images/icons8-sunCloudy.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[5].style.backgroundImage =
+    //             "url('./Images/icons8-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[7] === "Clear") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[5].style.backgroundImage =
+    //             "url('./Images/icons8-sun-96.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[5].style.backgroundImage =
+    //             "url('./Images/icons8-moon-and-stars-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[7] === "Rain") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[5].style.backgroundImage =
+    //             "url('./Images/icons8-rain-96.png')";
+    //         }
+    //       } else {
+    //         for (let j = 0; j < smallIcon.length; j++) {
+    //           smallIcon[5].style.backgroundImage =
+    //             "url('./Images/icons8-rain-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     if (wHourArray[7] === "Snow") {
+    //       for (let j = 0; j < smallIcon.length; j++) {
+    //         smallIcon[0].style.backgroundImage =
+    //           "url('./Images/icons8-snow-96.png')";
+    //       }
+    //     }
+    //   }
+    // }
+    // if (itemHour === hour[6].textContent) {
+    //   for (let i = 0; i < wHourArray.length; i++) {
+    //     if (wHourArray[0] === "Clouds") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[6].style.backgroundImage =
+    //             "url('./Images/icons8-sunCloudy.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[6].style.backgroundImage =
+    //             "url('./Images/icons8-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     // if (wHourArray[0] === "Clear") {
+    //     //   if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //     //     for (let i = 0; i < smallIcon.length; i++) {
+    //     //       smallIcon[6].style.backgroundImage =
+    //     //         "url('./Images/icons8-sun-96.png')";
+    //     //     }
+    //     //   } else {
+    //     //     for (let i = 0; i < smallIcon.length; i++) {
+    //     //       smallIcon[6].style.backgroundImage =
+    //     //         "url('./Images/icons8-moon-and-stars-96.png')";
+    //     //     }
+    //     //   }
+    //     // }
+    //     // if (wHourArray[0] === "Rain") {
+    //     //   if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //     //     for (let i = 0; i < smallIcon.length; i++) {
+    //     //       smallIcon[6].style.backgroundImage =
+    //     //         "url('./Images/icons8-rain-96.png')";
+    //     //     }
+    //     //   } else {
+    //     //     for (let j = 0; j < smallIcon.length; j++) {
+    //     //       smallIcon[6].style.backgroundImage =
+    //     //         "url('./Images/icons8-rain-night-96.png')";
+    //     //     }
+    //     //   }
+    //     // }
+    //     // if (wHourArray[0] === "Snow") {
+    //     //   for (let j = 0; j < smallIcon.length; j++) {
+    //     //     smallIcon[6].style.backgroundImage =
+    //     //       "url('./Images/icons8-snow-96.png')";
+    //     //   }
+    //     // }
+    //   }
+    // }
+    // if (itemHour === hour[7].textContent) {
+    //   for (let i = 0; i < wHourArray.length; i++) {
+    //     if (wHourArray[1] === "Clouds") {
+    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[7].style.backgroundImage =
+    //             "url('./Images/icons8-sunCloudy.png')";
+    //         }
+    //       } else {
+    //         for (let i = 0; i < smallIcon.length; i++) {
+    //           smallIcon[7].style.backgroundImage =
+    //             "url('./Images/icons8-night-96.png')";
+    //         }
+    //       }
+    //     }
+    //     // if (wHourArray[1] === "Clear") {
+    //     //   if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //     //     for (let i = 0; i < smallIcon.length; i++) {
+    //     //       smallIcon[7].style.backgroundImage =
+    //     //         "url('./Images/icons8-sun-96.png')";
+    //     //     }
+    //     //   } else {
+    //     //     for (let i = 0; i < smallIcon.length; i++) {
+    //     //       smallIcon[7].style.backgroundImage =
+    //     //         "url('./Images/icons8-moon-and-stars-96.png')";
+    //     //     }
+    //     //   }
+    //     // }
+    //     // if (wHourArray[1] === "Rain") {
+    //     //   if (itemHour <= "21:00" && itemHour >= "06:00") {
+    //     //     for (let i = 0; i < smallIcon.length; i++) {
+    //     //       smallIcon[7].style.backgroundImage =
+    //     //         "url('./Images/icons8-rain-96.png')";
+    //     //     }
+    //     //   } else {
+    //     //     for (let j = 0; j < smallIcon.length; j++) {
+    //     //       smallIcon[7].style.backgroundImage =
+    //     //         "url('./Images/icons8-rain-night-96.png')";
+    //     //     }
+    //     //   }
+    //     // }
+    //     // if (wHourArray[1] === "Snow") {
+    //     //   for (let j = 0; j < smallIcon.length; j++) {
+    //     //     smallIcon[7].style.backgroundImage =
+    //     //       "url('./Images/icons8-snow-96.png')";
+    //     //   }
+    //     // }
+    //   }
+    // }
+    //   }
+    // }
   };
   async function getHourFetch() {
     const responseHour = await fetch(urlHour, { mode: "cors" });
