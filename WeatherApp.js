@@ -14,10 +14,11 @@ const hour = document.querySelectorAll(".hour");
 let kelvin;
 let fahrenheitValue;
 let url =
-  "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Tokyo";
+  "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Roma,It";
 
 let urlHour =
-  "https://api.openweathermap.org/data/2.5/forecast?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Tokyo";
+  "https://api.openweathermap.org/data/2.5/forecast?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Roma,It&_=" +
+  Date.now();
 let datecurrent = new Date();
 const createDate = () => {
   let date =
@@ -36,7 +37,7 @@ const createDate = () => {
   dataAndTime.innerHTML = date;
   container.appendChild(dataAndTime);
 };
-// createDate();
+createDate();
 
 const weatherApp = () => {
   const searchLocation = (e) => {
@@ -53,27 +54,28 @@ const weatherApp = () => {
         "https://api.openweathermap.org/data/2.5/forecast?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=";
       urlHour = urlHour.concat(inputValue).trim();
       getDataFetch();
+      getHourFetch();
     }
   };
-  // getDataFetch();
+  getDataFetch();
 
   // funzione asincrona che unisce la ricerca all'Url
-  // async function getDataFetch() {
-  //   // metodo fetch per ottenere i dati API
-  //   const response = await fetch(url, { mode: "cors" });
-  //   const weatherData = await response.json();
-  //   console.log(weatherData);
-  //   loc.innerHTML = weatherData.name;
-  //   kelvin = weatherData.main.temp;
-  //   let humidity = weatherData.main.humidity;
-  //   let wind = weatherData.wind.speed;
-  //   let currentWeather = weatherData.weather[0].main;
-  //   let descriptionWeather = weatherData.weather[0].description;
-  //   changeIconWeahter(currentWeather, descriptionWeather);
-  //   kelvinTocelsius(kelvin);
-  //   updatesWindAndHumidityValues(wind, humidity);
-  // }
-  getHourFetch();
+  async function getDataFetch() {
+    // metodo fetch per ottenere i dati API
+    const response = await fetch(url, { mode: "cors" });
+    const weatherData = await response.json();
+    console.log(weatherData);
+    loc.innerHTML = weatherData.name;
+    kelvin = weatherData.main.temp;
+    let humidity = weatherData.main.humidity;
+    let wind = weatherData.wind.speed;
+    let currentWeather = weatherData.weather[0].main;
+    let descriptionWeather = weatherData.weather[0].description;
+    changeIconWeahter(currentWeather, descriptionWeather);
+    kelvinTocelsius(kelvin);
+    updatesWindAndHumidityValues(wind, humidity);
+    getHourFetch();
+  }
 
   let wHourArray = [];
 
@@ -94,7 +96,6 @@ const weatherApp = () => {
     }
     for (let i = 0; i < listArray.length; i++) {
       let weatherObject = listArray[i];
-      console.log(weatherObject);
       for (let property in weatherObject) {
         if (property === "weather") {
           for (let i = 0; i < weatherObject[property].length; i++) {
@@ -144,7 +145,6 @@ const weatherApp = () => {
     let positionWeatherHour = wHourArray.map((value, index) => {
       return { time: itemHourArray[index], wt: value };
     });
-    console.log(positionWeatherHour);
     // confronto orario con ora html
     for (let i = 0; i < itemHourArray.length; i++) {
       itemHour = itemHourArray[i];
@@ -301,407 +301,6 @@ const weatherApp = () => {
         }
       }
     }
-
-    // console.log(itemHourArray);
-    // console.log(wHourArray);
-    // if (itemHour === hour[5].textContent) {
-    //   for (let i = 0; i < wHourArray.length; i++) {}
-    // }
-
-    // if (itemHour === hour[0].textContent) {
-    //   for (let i = 0; i < wHourArray.length; i++) {
-    // if (wHourArray[0] === "Clouds") {
-    //   if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //     for (let i = 0; i < smallIcon.length; i++) {
-    //       smallIcon[0].style.backgroundImage =
-    //         "url('./Images/icons8-sunCloudy.png')";
-    //     }
-    //   } else {
-    //     for (let i = 0; i < smallIcon.length; i++) {
-    //       smallIcon[0].style.backgroundImage =
-    //         "url('./Images/icons8-night-96.png')";
-    //     }
-    //   }
-    // }
-    // if (wHourArray[2] === "Clear") {
-    //   if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //     for (let i = 0; i < smallIcon.length; i++) {
-    //       smallIcon[0].style.backgroundImage =
-    //         "url('./Images/icons8-sun-96.png')";
-    //     }
-    //   } else {
-    //     for (let i = 0; i < smallIcon.length; i++) {
-    //       smallIcon[0].style.backgroundImage =
-    //         "url('./Images/icons8-moon-and-stars-96.png')";
-    //     }
-    //   }
-    // }
-    //     if (wHourArray[2] === "Rain") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[0].style.backgroundImage =
-    //             "url('./Images/icons8-rain-96.png')";
-    //         }
-    //       } else {
-    //         for (let j = 0; j < smallIcon.length; j++) {
-    //           smallIcon[0].style.backgroundImage =
-    //             "url('./Images/icons8-rain-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[2] === "Snow") {
-    //       for (let j = 0; j < smallIcon.length; j++) {
-    //         smallIcon[0].style.backgroundImage =
-    //           "url('./Images/icons8-snow-96.png')";
-    //       }
-    //     }
-    //   }
-    // }
-    // if (itemHour === hour[1].textContent) {
-    //   for (let i = 0; i < wHourArray.length; i++) {
-    //     if (wHourArray[3] === "Clouds") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[1].style.backgroundImage =
-    //             "url('./Images/icons8-sunCloudy.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[1].style.backgroundImage =
-    //             "url('./Images/icons8-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[3] === "Clear") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[0].style.backgroundImage =
-    //             "url('./Images/icons8-sun-96.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[1].style.backgroundImage =
-    //             "url('./Images/icons8-moon-and-stars-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[3] === "Rain") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[1].style.backgroundImage =
-    //             "url('./Images/icons8-rain-96.png')";
-    //         }
-    //       } else {
-    //         for (let j = 0; j < smallIcon.length; j++) {
-    //           smallIcon[1].style.backgroundImage =
-    //             "url('./Images/icons8-rain-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[3] === "Snow") {
-    //       for (let j = 0; j < smallIcon.length; j++) {
-    //         smallIcon[1].style.backgroundImage =
-    //           "url('./Images/icons8-snow-96.png')";
-    //       }
-    //     }
-    //   }
-    // }
-    // if (itemHour === hour[2].textContent) {
-    //   for (let i = 0; i < wHourArray.length; i++) {
-    //     if (wHourArray[4] === "Clouds") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[2].style.backgroundImage =
-    //             "url('./Images/icons8-sunCloudy.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[2].style.backgroundImage =
-    //             "url('./Images/icons8-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[4] === "Clear") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[2].style.backgroundImage =
-    //             "url('./Images/icons8-sun-96.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[2].style.backgroundImage =
-    //             "url('./Images/icons8-moon-and-stars-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[4] === "Rain") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[2].style.backgroundImage =
-    //             "url('./Images/icons8-rain-96.png')";
-    //         }
-    //       } else {
-    //         for (let j = 0; j < smallIcon.length; j++) {
-    //           smallIcon[2].style.backgroundImage =
-    //             "url('./Images/icons8-rain-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[4] === "Snow") {
-    //       for (let j = 0; j < smallIcon.length; j++) {
-    //         smallIcon[2].style.backgroundImage =
-    //           "url('./Images/icons8-snow-96.png')";
-    //       }
-    //     }
-    //   }
-    // }
-    // if (itemHour === hour[3].textContent) {
-    //   for (let i = 0; i < wHourArray.length; i++) {
-    //     if (wHourArray[5] === "Clouds") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[3].style.backgroundImage =
-    //             "url('./Images/icons8-sunCloudy.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[3].style.backgroundImage =
-    //             "url('./Images/icons8-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[5] === "Clear") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[3].style.backgroundImage =
-    //             "url('./Images/icons8-sun-96.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[3].style.backgroundImage =
-    //             "url('./Images/icons8-moon-and-stars-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[5] === "Rain") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[3].style.backgroundImage =
-    //             "url('./Images/icons8-rain-96.png')";
-    //         }
-    //       } else {
-    //         for (let j = 0; j < smallIcon.length; j++) {
-    //           smallIcon[3].style.backgroundImage =
-    //             "url('./Images/icons8-rain-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[5] === "Snow") {
-    //       for (let j = 0; j < smallIcon.length; j++) {
-    //         smallIcon[3].style.backgroundImage =
-    //           "url('./Images/icons8-snow-96.png')";
-    //       }
-    //     }
-    //   }
-    // }
-    // if (itemHour === hour[4].textContent) {
-    //   for (let i = 0; i < wHourArray.length; i++) {
-    //     if (wHourArray[6] === "Clouds") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[4].style.backgroundImage =
-    //             "url('./Images/icons8-sunCloudy.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[4].style.backgroundImage =
-    //             "url('./Images/icons8-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[6] === "Clear") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[4].style.backgroundImage =
-    //             "url('./Images/icons8-sun-96.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[4].style.backgroundImage =
-    //             "url('./Images/icons8-moon-and-stars-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[6] === "Rain") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[4].style.backgroundImage =
-    //             "url('./Images/icons8-rain-96.png')";
-    //         }
-    //       } else {
-    //         for (let j = 0; j < smallIcon.length; j++) {
-    //           smallIcon[4].style.backgroundImage =
-    //             "url('./Images/icons8-rain-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[6] === "Snow") {
-    //       for (let j = 0; j < smallIcon.length; j++) {
-    //         smallIcon[4].style.backgroundImage =
-    //           "url('./Images/icons8-snow-96.png')";
-    //       }
-    //     }
-    //   }
-    // }
-    // if (itemHour === hour[5].textContent) {
-    //   for (let i = 0; i < wHourArray.length; i++) {
-    //     if (wHourArray[7] === "Clouds") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[5].style.backgroundImage =
-    //             "url('./Images/icons8-sunCloudy.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[5].style.backgroundImage =
-    //             "url('./Images/icons8-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[7] === "Clear") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[5].style.backgroundImage =
-    //             "url('./Images/icons8-sun-96.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[5].style.backgroundImage =
-    //             "url('./Images/icons8-moon-and-stars-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[7] === "Rain") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[5].style.backgroundImage =
-    //             "url('./Images/icons8-rain-96.png')";
-    //         }
-    //       } else {
-    //         for (let j = 0; j < smallIcon.length; j++) {
-    //           smallIcon[5].style.backgroundImage =
-    //             "url('./Images/icons8-rain-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     if (wHourArray[7] === "Snow") {
-    //       for (let j = 0; j < smallIcon.length; j++) {
-    //         smallIcon[0].style.backgroundImage =
-    //           "url('./Images/icons8-snow-96.png')";
-    //       }
-    //     }
-    //   }
-    // }
-    // if (itemHour === hour[6].textContent) {
-    //   for (let i = 0; i < wHourArray.length; i++) {
-    //     if (wHourArray[0] === "Clouds") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[6].style.backgroundImage =
-    //             "url('./Images/icons8-sunCloudy.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[6].style.backgroundImage =
-    //             "url('./Images/icons8-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     // if (wHourArray[0] === "Clear") {
-    //     //   if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //     //     for (let i = 0; i < smallIcon.length; i++) {
-    //     //       smallIcon[6].style.backgroundImage =
-    //     //         "url('./Images/icons8-sun-96.png')";
-    //     //     }
-    //     //   } else {
-    //     //     for (let i = 0; i < smallIcon.length; i++) {
-    //     //       smallIcon[6].style.backgroundImage =
-    //     //         "url('./Images/icons8-moon-and-stars-96.png')";
-    //     //     }
-    //     //   }
-    //     // }
-    //     // if (wHourArray[0] === "Rain") {
-    //     //   if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //     //     for (let i = 0; i < smallIcon.length; i++) {
-    //     //       smallIcon[6].style.backgroundImage =
-    //     //         "url('./Images/icons8-rain-96.png')";
-    //     //     }
-    //     //   } else {
-    //     //     for (let j = 0; j < smallIcon.length; j++) {
-    //     //       smallIcon[6].style.backgroundImage =
-    //     //         "url('./Images/icons8-rain-night-96.png')";
-    //     //     }
-    //     //   }
-    //     // }
-    //     // if (wHourArray[0] === "Snow") {
-    //     //   for (let j = 0; j < smallIcon.length; j++) {
-    //     //     smallIcon[6].style.backgroundImage =
-    //     //       "url('./Images/icons8-snow-96.png')";
-    //     //   }
-    //     // }
-    //   }
-    // }
-    // if (itemHour === hour[7].textContent) {
-    //   for (let i = 0; i < wHourArray.length; i++) {
-    //     if (wHourArray[1] === "Clouds") {
-    //       if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[7].style.backgroundImage =
-    //             "url('./Images/icons8-sunCloudy.png')";
-    //         }
-    //       } else {
-    //         for (let i = 0; i < smallIcon.length; i++) {
-    //           smallIcon[7].style.backgroundImage =
-    //             "url('./Images/icons8-night-96.png')";
-    //         }
-    //       }
-    //     }
-    //     // if (wHourArray[1] === "Clear") {
-    //     //   if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //     //     for (let i = 0; i < smallIcon.length; i++) {
-    //     //       smallIcon[7].style.backgroundImage =
-    //     //         "url('./Images/icons8-sun-96.png')";
-    //     //     }
-    //     //   } else {
-    //     //     for (let i = 0; i < smallIcon.length; i++) {
-    //     //       smallIcon[7].style.backgroundImage =
-    //     //         "url('./Images/icons8-moon-and-stars-96.png')";
-    //     //     }
-    //     //   }
-    //     // }
-    //     // if (wHourArray[1] === "Rain") {
-    //     //   if (itemHour <= "21:00" && itemHour >= "06:00") {
-    //     //     for (let i = 0; i < smallIcon.length; i++) {
-    //     //       smallIcon[7].style.backgroundImage =
-    //     //         "url('./Images/icons8-rain-96.png')";
-    //     //     }
-    //     //   } else {
-    //     //     for (let j = 0; j < smallIcon.length; j++) {
-    //     //       smallIcon[7].style.backgroundImage =
-    //     //         "url('./Images/icons8-rain-night-96.png')";
-    //     //     }
-    //     //   }
-    //     // }
-    //     // if (wHourArray[1] === "Snow") {
-    //     //   for (let j = 0; j < smallIcon.length; j++) {
-    //     //     smallIcon[7].style.backgroundImage =
-    //     //       "url('./Images/icons8-snow-96.png')";
-    //     //   }
-    //     // }
-    //   }
-    // }
-    //   }
-    // }
   };
   async function getHourFetch() {
     const responseHour = await fetch(urlHour, { mode: "cors" });
@@ -736,7 +335,6 @@ const weatherApp = () => {
     fahrenheit = Math.floor(fahrenheit);
     degrees.innerHTML = `${fahrenheit}°F`;
     fahrenheitValue = true;
-    console.log(fahrenheit);
   };
 
   const changeIconWeahter = (currentWeather, descriptionWeather) => {
