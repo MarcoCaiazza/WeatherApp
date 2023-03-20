@@ -22,6 +22,11 @@ body {
     display: flex;
     justify-content: center;
     margin-top: 50px;
+    /* background-color: aqua; */
+}
+.checkLocation {
+    color: blue;
+    
 }
 input{
     height: 35px;
@@ -126,7 +131,7 @@ button{
     align-items: center;
 }
 .hour_degrees{
-    /* background-color: blueviolet; */
+    background-color: blueviolet;
     width: 110px;
     height: 160px;
     display: flex;

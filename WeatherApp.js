@@ -1,6 +1,5 @@
 const inputSearch = document.getElementById("search");
 const myForm = document.getElementById("myForm");
-// const btnSearch = document.getElementById("btnSearch");
 const loc = document.getElementById("loc");
 const degrees = document.getElementById("degrees");
 const container = document.querySelector(".container");
@@ -10,6 +9,7 @@ const windData = document.querySelector("#windData");
 const humidityData = document.querySelector("#humidityData");
 const smallIcon = document.getElementsByClassName("icon");
 const hour = document.querySelectorAll(".hour");
+const containerForm = document.getElementById("containerForm");
 
 let kelvin;
 let fahrenheitValue;
@@ -17,8 +17,7 @@ let url =
   "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Roma,It";
 
 let urlHour =
-  "https://api.openweathermap.org/data/2.5/forecast?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Roma,It&_=" +
-  Date.now();
+  "https://api.openweathermap.org/data/2.5/forecast?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Roma,It";
 let datecurrent = new Date();
 const createDate = () => {
   let date =
@@ -40,7 +39,7 @@ const createDate = () => {
 createDate();
 
 const weatherApp = () => {
-  const searchLocation = (e) => {
+  const searchLocation = async (e) => {
     if (inputSearch.value.trim() === "") {
       e.preventDefault();
       inputSearch.setAttribute("required", true);
@@ -53,16 +52,17 @@ const weatherApp = () => {
       urlHour =
         "https://api.openweathermap.org/data/2.5/forecast?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=";
       urlHour = urlHour.concat(inputValue).trim();
-      getDataFetch();
-      getHourFetch();
+      await getDataFetch();
+      inputSearch.value = "";
     }
   };
-  getDataFetch();
-
   // funzione asincrona che unisce la ricerca all'Url
-  async function getDataFetch() {
+  const getDataFetch = async () => {
     // metodo fetch per ottenere i dati API
     const response = await fetch(url, { mode: "cors" });
+    if (response.status === 404) {
+      return;
+    }
     const weatherData = await response.json();
     console.log(weatherData);
     loc.innerHTML = weatherData.name;
@@ -74,12 +74,12 @@ const weatherApp = () => {
     changeIconWeahter(currentWeather, descriptionWeather);
     kelvinTocelsius(kelvin);
     updatesWindAndHumidityValues(wind, humidity);
-    getHourFetch();
-  }
+    await getHourFetch();
+  };
 
-  let wHourArray = [];
+  // let wHourArray = [];
 
-  let listArray = [];
+  // let listArray = [];
 
   const getHourlyWeather = (weatherHour) => {
     let wHour;
@@ -302,15 +302,17 @@ const weatherApp = () => {
       }
     }
   };
-  async function getHourFetch() {
-    const responseHour = await fetch(urlHour, { mode: "cors" });
-    const weatherHourData = await responseHour.json();
+  const getHourFetch = async () => {
+    const response = await fetch(urlHour, { mode: "cors" });
+    const weatherHourData = await response.json();
     console.log(weatherHourData);
+    wHourArray = [];
+    listArray = [];
     let weatherHour = weatherHourData.list;
     getHourlyWeather(weatherHour);
     getTimeEveryThreeHours(weatherHour);
     changeSmallIconWeather();
-  }
+  };
 
   const changeDegrees = () => {
     if (fahrenheitValue === false) {
@@ -370,5 +372,6 @@ const weatherApp = () => {
   };
 
   myForm.addEventListener("submit", (e) => searchLocation(e));
+  getDataFetch();
 };
 document.addEventListener("DOMContentLoaded", weatherApp);
