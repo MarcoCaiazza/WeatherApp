@@ -10,9 +10,12 @@ const humidityData = document.querySelector("#humidityData");
 const smallIcon = document.getElementsByClassName("icon");
 const hour = document.querySelectorAll(".hour");
 const containerForm = document.getElementById("containerForm");
+const degreesDay = document.getElementsByClassName("degrees_day");
 
 let kelvin;
 let fahrenheitValue;
+let kelvinHour;
+let fahrenheitHour;
 let url =
   "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Roma,It";
 
@@ -72,14 +75,10 @@ const weatherApp = () => {
     let currentWeather = weatherData.weather[0].main;
     let descriptionWeather = weatherData.weather[0].description;
     changeIconWeahter(currentWeather, descriptionWeather);
-    kelvinTocelsius(kelvin);
+    kelvinToCelsius(kelvin);
     updatesWindAndHumidityValues(wind, humidity);
     await getHourFetch();
   };
-
-  // let wHourArray = [];
-
-  // let listArray = [];
 
   const getHourlyWeather = (weatherHour) => {
     let wHour;
@@ -108,6 +107,7 @@ const weatherApp = () => {
   };
 
   let wHourThreeArray = [];
+
   const getTimeEveryThreeHours = (weatherHour) => {
     for (let i = 0; i < 8; i++) {
       let weatherObject = weatherHour[i];
@@ -302,22 +302,83 @@ const weatherApp = () => {
       }
     }
   };
+
+  const changeDegreesThreeHourCel = () => {
+    for (let i = 0; i < degreesDay.length; i++) {
+      degreesDay[0].innerHTML = `${tempHourArrCels[0]}°C`;
+      degreesDay[1].innerHTML = `${tempHourArrCels[1]}°C`;
+      degreesDay[2].innerHTML = `${tempHourArrCels[2]}°C`;
+      degreesDay[3].innerHTML = `${tempHourArrCels[3]}°C`;
+      degreesDay[4].innerHTML = `${tempHourArrCels[4]}°C`;
+      degreesDay[5].innerHTML = `${tempHourArrCels[5]}°C`;
+      degreesDay[6].innerHTML = `${tempHourArrCels[6]}°C`;
+      degreesDay[7].innerHTML = `${tempHourArrCels[7]}°C`;
+    }
+  };
+  const changeDegreesThreeHourFarh = () => {
+    for (let i = 0; i < degreesDay.length; i++) {
+      degreesDay[0].innerHTML = `${tempHourArrFarh[0]}°F`;
+      degreesDay[1].innerHTML = `${tempHourArrFarh[1]}°F`;
+      degreesDay[2].innerHTML = `${tempHourArrFarh[2]}°F`;
+      degreesDay[3].innerHTML = `${tempHourArrFarh[3]}°F`;
+      degreesDay[4].innerHTML = `${tempHourArrFarh[4]}°F`;
+      degreesDay[5].innerHTML = `${tempHourArrFarh[5]}°F`;
+      degreesDay[6].innerHTML = `${tempHourArrFarh[6]}°F`;
+      degreesDay[7].innerHTML = `${tempHourArrFarh[7]}°F`;
+    }
+  };
+
+  let tempHourArrCels = [];
+  let tempHourArrFarh = [];
+  let celsiusHour;
+
+  const tempHourWeather = () => {
+    for (let i = 0; i < listArray.length; i++) {
+      for (let property in listArray[i]) {
+        if (property === "main") {
+          kelvinHour = listArray[i][property].temp;
+          kelvinToCelsiusHour(kelvinHour);
+          celsiusToFahrenheitHour(kelvinHour);
+          tempHourArrCels.push(celsiusHour);
+          tempHourArrFarh.push(fahrenheitHour);
+          changeDegreesThreeHourCel();
+        }
+      }
+    }
+  };
+  const kelvinToCelsiusHour = (kelvinHour) => {
+    celsiusHour = kelvinHour - 273.15;
+    celsiusHour = Math.ceil(celsiusHour);
+    changeDegreesThreeHourCel();
+  };
+  const celsiusToFahrenheitHour = (kelvinHour) => {
+    fahrenheitHour = ((kelvinHour - 273.15) * 9) / 5 + 32;
+    fahrenheitHour = Math.floor(fahrenheitHour);
+    changeDegreesThreeHourFarh();
+  };
   const getHourFetch = async () => {
     const response = await fetch(urlHour, { mode: "cors" });
     const weatherHourData = await response.json();
     console.log(weatherHourData);
     wHourArray = [];
     listArray = [];
+    tempHourArrCels = [];
+    tempHourArrFarh = [];
     let weatherHour = weatherHourData.list;
     getHourlyWeather(weatherHour);
     getTimeEveryThreeHours(weatherHour);
     changeSmallIconWeather();
+    tempHourWeather();
   };
 
   const changeDegrees = () => {
     if (fahrenheitValue === false) {
-      celsiusTofahrenheit(kelvin);
-    } else kelvinTocelsius(kelvin);
+      celsiusToFahrenheit(kelvin);
+      celsiusToFahrenheitHour(kelvinHour);
+    } else if (fahrenheitValue === true) {
+      kelvinToCelsius(kelvin);
+      kelvinToCelsiusHour(kelvinHour);
+    }
   };
   degrees.addEventListener("click", changeDegrees);
 
@@ -326,13 +387,13 @@ const weatherApp = () => {
     humidityData.innerHTML = `Humidity : ${humidity} %`;
   };
 
-  const kelvinTocelsius = (kelvin) => {
+  const kelvinToCelsius = (kelvin) => {
     let celsius = kelvin - 273.15;
     celsius = Math.ceil(celsius);
     degrees.innerHTML = `${celsius}°C`;
     fahrenheitValue = false;
   };
-  const celsiusTofahrenheit = (kelvin) => {
+  const celsiusToFahrenheit = (kelvin) => {
     let fahrenheit = ((kelvin - 273.15) * 9) / 5 + 32;
     fahrenheit = Math.floor(fahrenheit);
     degrees.innerHTML = `${fahrenheit}°F`;
