@@ -146,12 +146,18 @@ button{
 /* // media query */
 
 @media only screen and (max-width: 600px) {
+    .containerForm {
+        margin-top: 0px;
+    }
+    .dataAndTime {
+        font-size: 35px;
+    }
     .container {
         margin-top: 15px;
         height: 408px;
     }
     .containerDegrees {
-        margin-top: 20px;
+        margin-top: 10px;
         gap:45px
     }
     .containerWindHumidity {
@@ -165,7 +171,12 @@ button{
         margin-right: 20px
     }
     .hour_degrees {
-        width: 67px;
-        height: 122px;
+        width: 62px;
+        height: 84px;
+        gap: 34px;
+        letter-spacing: 1px
+    }
+    .icon {
+        position: absolute;
     }
 }
