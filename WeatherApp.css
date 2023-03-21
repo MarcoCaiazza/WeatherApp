@@ -142,3 +142,31 @@ button{
     50% { transform: translateY(-15px) }
     100% {transform: translateY(0);}
 }
+
+/* // media query */
+
+@media only screen and (max-width: 600px) {
+ 
+    .container {
+        margin-top: 15px;
+    }
+    .containerDegrees {
+        margin-top: 20px;
+    }
+    .containerWindHumidity {
+        gap: 20px;
+        margin-top: 30px;
+    }
+    .box_day {
+        /* width: 200px; */
+        height: 10px;
+        /* justify-content: none; */
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-right: 20px
+    }
+    .hour_degrees {
+        width: 67px;
+        height: 122px;
+    }
+}
