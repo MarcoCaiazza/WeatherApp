@@ -22,7 +22,6 @@ body {
     display: flex;
     justify-content: center;
     margin-top: 50px;
-    /* background-color: aqua; */
 }
 input{
     height: 35px;
@@ -34,6 +33,7 @@ input{
     padding: 3px 0 3px 10px;
     background-color: rgba(255, 255, 255, 0.5);
 }
+
 button{
     height: 44px;
     width: 44px;
@@ -45,17 +45,14 @@ button{
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 0.5); 
 }
-
 .container {
     display: flex;
     margin-top: 100px;
-    /* background-color: red; */
     height: 500px;
     flex-direction: column;
 }
 #containerLoc{
     display: flex;
-    /* background-color: aqua; */
     justify-content: center;
 }
 #loc{
@@ -67,7 +64,6 @@ button{
     border : 2px solid rgba(255, 255, 255, 0.3); 
 }
 .containerDegrees{
-    /* background-color: blueviolet; */
     display: flex;
     margin-top: 50px;
     justify-content:center;
@@ -75,12 +71,10 @@ button{
     gap: 100px;
 }
 #degrees{
-    /* background-color: chartreuse; */
     font-size: 70px;
     font-weight: bold;
 }
 #iconApp{
-    /* background-color: rgb(47, 225, 184); */
     width: 140px;
     height: 140px;
     background-image: url('./Images/icons8-sun-96.png');
@@ -88,16 +82,12 @@ button{
     background-position: center;
 }
 .icon {
-    /* background-color: red; */
     width: 38px;
     height: 38px;
     background-image: url('./Images/icons8-sun-96.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 50px 50px;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
 }
 .dataAndTime {
     font-weight: bold;
@@ -108,7 +98,6 @@ button{
 .containerWindHumidity{
     margin-top: 70px;
     font-size: 20px;
-    /* background-color: chartreuse;  */
     display: flex; 
     justify-content: center; 
     gap: 70px; 
@@ -116,13 +105,11 @@ button{
     font-weight: bold;
 } 
 .box_day_hours {
-    /* background-color: blue; */
     height: 200px;
     display: flex;
     justify-content: center
 }
 .box_day {
-    /* background-color: bisque; */
     width: 1000px;
     display: flex;
     justify-content: space-around;
@@ -142,4 +129,16 @@ button{
     font-weight: bold;
     letter-spacing: 2px;
     border: 2px solid rgba(255, 255, 255, 0.3); 
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    transform-origin: bottom;
+}
+.hour_degrees:hover {
+    animation-name: bounce;
+    animation-timing-function: ease;
+}
+@keyframes bounce {
+    0% { transform: translateY(0);}
+    50% { transform: translateY(-15px) }
+    100% {transform: translateY(0);}
 }

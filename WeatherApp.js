@@ -16,13 +16,20 @@ let kelvin;
 let fahrenheitValue;
 let kelvinHour;
 let fahrenheitHour;
+
 let url =
   "https://api.openweathermap.org/data/2.5/weather?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Roma,It";
 
 let urlHour =
   "https://api.openweathermap.org/data/2.5/forecast?APPID=145746dae4f07b5e4c7d879a1b0431dd&q=Roma,It";
+
 let datecurrent = new Date();
+console.log(datecurrent);
+
+// Crea data e orario
+
 const createDate = () => {
+  let minutes = `${datecurrent.getMinutes()}`.padStart(2, "0");
   let date =
     `${datecurrent.getDate()}` +
     "/" +
@@ -32,7 +39,9 @@ const createDate = () => {
     " " +
     `${datecurrent.getHours()}` +
     ":" +
-    `${datecurrent.getMinutes()}`;
+    `${minutes}`;
+
+  console.log(date);
 
   let dataAndTime = document.createElement("dataAndTime");
   dataAndTime.classList = "dataAndTime";
@@ -42,6 +51,8 @@ const createDate = () => {
 createDate();
 
 const weatherApp = () => {
+  // Funzione asincorna e inserimento dell'API
+
   const searchLocation = async (e) => {
     if (inputSearch.value.trim() === "") {
       e.preventDefault();
@@ -59,15 +70,19 @@ const weatherApp = () => {
       inputSearch.value = "";
     }
   };
-  // funzione asincrona che unisce la ricerca all'Url
+  // Funzione asincrona che ottiene dati dall'API
+
   const getDataFetch = async () => {
-    // metodo fetch per ottenere i dati API
     const response = await fetch(url, { mode: "cors" });
     if (response.status === 404) {
       return;
     }
+    // attesa delle informazioni dall'API
     const weatherData = await response.json();
+
     console.log(weatherData);
+
+    // Trascrizione dati Api in html
     loc.innerHTML = weatherData.name;
     kelvin = weatherData.main.temp;
     let humidity = weatherData.main.humidity;
@@ -79,6 +94,8 @@ const weatherApp = () => {
     updatesWindAndHumidityValues(wind, humidity);
     await getHourFetch();
   };
+
+  //Ottieni meteo orario
 
   const getHourlyWeather = (weatherHour) => {
     let wHour;
@@ -108,6 +125,8 @@ const weatherApp = () => {
 
   let wHourThreeArray = [];
 
+  // Ottini meteo ogni 3 ore
+
   const getTimeEveryThreeHours = (weatherHour) => {
     for (let i = 0; i < 8; i++) {
       let weatherObject = weatherHour[i];
@@ -120,6 +139,9 @@ const weatherApp = () => {
       }
     }
   };
+
+  // Cambia le icone del meteo dei vari orari
+
   const changeSmallIconWeather = () => {
     let itemHour;
     let itemHourArray = [];
@@ -127,13 +149,16 @@ const weatherApp = () => {
     for (let i = 0; i < wHourThreeArray.length; i++) {
       itemHourArray.push(wHourThreeArray[i]);
     }
+
     //ORDINA DA 00:00 A 21:00
+
     itemHourArray.sort((a, b) => {
       let [aHours, aMinutes] = a.split(":");
       let [bHours, bMinutes] = b.split(":");
       if (aHours === 0) {
         aHours = "24";
       } // considera mezzanotte come 24:00
+
       if (bHours === 0) {
         bHours = "24";
       }
@@ -141,14 +166,20 @@ const weatherApp = () => {
       let bTotalMinutes = bHours * 60 + bMinutes;
       return aTotalMinutes - bTotalMinutes;
     });
+
     //posizione ora/meteo
+
     let positionWeatherHour = wHourArray.map((value, index) => {
       return { time: itemHourArray[index], wt: value };
     });
+
     // confronto orario con ora html
+
     for (let i = 0; i < itemHourArray.length; i++) {
       itemHour = itemHourArray[i];
+
       //21:00
+
       if (itemHour === hour[5].textContent) {
         if (positionWeatherHour[7].wt === "Clouds") {
           smallIcon[5].style.backgroundImage =
@@ -167,7 +198,9 @@ const weatherApp = () => {
             "url('./Images/icons8-snow-96.png')";
         }
       }
+
       // 18:00
+
       if (itemHour === hour[4].textContent) {
         if (positionWeatherHour[6].wt === "Clouds") {
           smallIcon[4].style.backgroundImage =
@@ -186,7 +219,9 @@ const weatherApp = () => {
             "url('./Images/icons8-snow-96.png')";
         }
       }
+
       // 15:00
+
       if (itemHour === hour[3].textContent) {
         if (positionWeatherHour[5].wt === "Clouds") {
           smallIcon[3].style.backgroundImage =
@@ -205,7 +240,9 @@ const weatherApp = () => {
             "url('./Images/icons8-snow-96.png')";
         }
       }
+
       // 12:00
+
       if (itemHour === hour[2].textContent) {
         if (positionWeatherHour[4].wt === "Clouds") {
           smallIcon[2].style.backgroundImage =
@@ -224,7 +261,9 @@ const weatherApp = () => {
             "url('./Images/icons8-snow-96.png')";
         }
       }
+
       // 09:00
+
       if (itemHour === hour[1].textContent) {
         if (positionWeatherHour[3].wt === "Clouds") {
           smallIcon[1].style.backgroundImage =
@@ -243,7 +282,9 @@ const weatherApp = () => {
             "url('./Images/icons8-snow-96.png')";
         }
       }
+
       // 06:00
+
       if (itemHour === hour[0].textContent) {
         if (positionWeatherHour[2].wt === "Clouds") {
           smallIcon[0].style.backgroundImage =
@@ -262,7 +303,9 @@ const weatherApp = () => {
             "url('./Images/icons8-snow-96.png')";
         }
       }
+
       //03:00
+
       if (itemHour === hour[7].textContent) {
         if (positionWeatherHour[1].wt === "Clouds") {
           smallIcon[7].style.backgroundImage =
@@ -281,7 +324,9 @@ const weatherApp = () => {
             "url('./Images/icons8-snow-96.png')";
         }
       }
+
       //00:00
+
       if (itemHour === hour[6].textContent) {
         if (positionWeatherHour[0].wt === "Clouds") {
           smallIcon[6].style.backgroundImage =
@@ -303,6 +348,8 @@ const weatherApp = () => {
     }
   };
 
+  // funzione che imposta i gradi celsius di tre ore
+
   const changeDegreesThreeHourCel = () => {
     for (let i = 0; i < degreesDay.length; i++) {
       degreesDay[0].innerHTML = `${tempHourArrCels[0]}°C`;
@@ -315,6 +362,9 @@ const weatherApp = () => {
       degreesDay[7].innerHTML = `${tempHourArrCels[7]}°C`;
     }
   };
+
+  //funzione che imposta i gradi fahrenheit di tre ore
+
   const changeDegreesThreeHourFarh = () => {
     for (let i = 0; i < degreesDay.length; i++) {
       degreesDay[0].innerHTML = `${tempHourArrFarh[0]}°F`;
@@ -346,16 +396,19 @@ const weatherApp = () => {
       }
     }
   };
+
   const kelvinToCelsiusHour = (kelvinHour) => {
     celsiusHour = kelvinHour - 273.15;
     celsiusHour = Math.ceil(celsiusHour);
     changeDegreesThreeHourCel();
   };
+
   const celsiusToFahrenheitHour = (kelvinHour) => {
     fahrenheitHour = ((kelvinHour - 273.15) * 9) / 5 + 32;
     fahrenheitHour = Math.floor(fahrenheitHour);
     changeDegreesThreeHourFarh();
   };
+
   const getHourFetch = async () => {
     const response = await fetch(urlHour, { mode: "cors" });
     const weatherHourData = await response.json();
@@ -386,6 +439,7 @@ const weatherApp = () => {
     windData.innerHTML = `Wind Speed : ${wind} km/h`;
     humidityData.innerHTML = `Humidity : ${humidity} %`;
   };
+  //funzione che imposta i gradi da kelvin a celsius del momento
 
   const kelvinToCelsius = (kelvin) => {
     let celsius = kelvin - 273.15;
@@ -393,12 +447,16 @@ const weatherApp = () => {
     degrees.innerHTML = `${celsius}°C`;
     fahrenheitValue = false;
   };
+  //funzione che imposta i gradi celsius a fahrenheit del momento
+
   const celsiusToFahrenheit = (kelvin) => {
     let fahrenheit = ((kelvin - 273.15) * 9) / 5 + 32;
     fahrenheit = Math.floor(fahrenheit);
     degrees.innerHTML = `${fahrenheit}°F`;
     fahrenheitValue = true;
   };
+
+  //cambia icona del meteo del momento
 
   const changeIconWeahter = (currentWeather, descriptionWeather) => {
     if (currentWeather === "Clouds") {
